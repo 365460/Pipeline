@@ -1,0 +1,7 @@
+*.exe
+check.sh
+tools
+*.o
+*.exe
+*.rpt
+*.gch
