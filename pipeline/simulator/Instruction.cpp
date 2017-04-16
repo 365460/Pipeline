@@ -103,21 +103,38 @@ Instruction* Instruction::decode(int code){
 
     // control signal
     if(inst->type == R_Type){
-        inst->WB = true;
-        inst->MEM = false;
+        inst->RegWrite = true;
+        inst->MEMRead = false;
+        inst->MEMWrite = false;
     }
     else if(inst->type == I_Type){
 
         int opcode = inst->opcode;
-        if(opcode==0x23 || opcode==0x21 || opcode==0x25 || opcode==0x20 ||
-           opcode==0x24 || opcode==0x2B || opcode==0x29 || opcode==0x28)
-           inst->MEM = true;
-        else inst->MEM = false;
 
+        if(opcode==0x23||opcode==0x21||opcode==0x25||opcode==0x20||opcode==0x24)
+           inst->MEMRead = true;
+        else inst->MEMRead = false;
+
+        if(opcode==0x2B || opcode==0x29 || opcode==0x28) inst->MEMWrite = true;
+        else inst->MEMWrite = false;
+
+        // store and control
         if(opcode==0x2B || opcode==0x29 || opcode==0x28 || opcode==0x04 ||
             opcode==0x05 || opcode==0x07)
-            inst->WB = false;
-        else inst->WB = true;
+            inst->RegWrite = false;
+        else inst->RegWrite = true;
+    }
+    else if(inst->type == J_Type){
+        if(inst->opcode == 0x03) // jal
+            inst->RegWrite = true;
+        else inst->RegWrite = false;
+
+        inst->MEMRead = inst->MEMWrite = false;
+    }
+    else{ // halt
+        inst->RegWrite = false;
+        inst->MEMRead = false;
+        inst->MEMWrite = false;
     }
 
     return inst;

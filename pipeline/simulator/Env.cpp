@@ -1,7 +1,17 @@
 #include "Env.h"
 
 Env::Env(){
-    hadgethi = true;
+
+    hadgetHi = true;
+    stage[0] = new Stage("IF");
+    stage[1] = new Stage("ID");
+    stage[2] = new Stage("EX");
+    stage[3] = new Stage("DM");
+    stage[4] = new Stage("WB");
+
+    for(int i=0; i<4; i++)
+        preg[i] = new PipelineReg(); // nop
+
     for(int i=0; i<260; i++) memory[i] = 0;
     for(int i=0; i<34; i++){
         report.push_back(i);

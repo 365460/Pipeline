@@ -1,14 +1,20 @@
 #include "Stage.h"
 
-Stage::Stage(){}
-
-Stage::Stage(int name){
-    this->name = name;
+Stage::Stage()
+{
     isRs = isRt = false;
+    status = NOP;
 }
 
-void Stage::set(string instName, Status s){
-    this->instName = instName;
+Stage::Stage(string name){
+    this->name = name;
+    isRs = isRt = false;
+    status = NOP;
+}
+
+void Stage::set(string inst, Status s){
+    clearStatus();
+    this->instName = inst;
     status = s;
 }
 
@@ -18,10 +24,12 @@ void Stage::clearStatus(){
 }
 
 void Stage::setforwardRs(string s){
+    status = Fwd;
     frs = s;
 }
 
 void Stage::setforwardRt(string s){
+    status = Fwd;
     frt = s;
 }
 

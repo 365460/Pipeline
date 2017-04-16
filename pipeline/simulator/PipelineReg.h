@@ -8,7 +8,7 @@ class PipelineReg{
 public:
     Instruction *inst;
     int ALUResult, MEMResult;
-    bool WBWrite, MEMread, MEMWrite, nop;
+    bool nop;
 
     PipelineReg(); // will set NOP
     PipelineReg(Instruction* i);

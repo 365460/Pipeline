@@ -15,16 +15,17 @@ enum Status {
 };
 
 class Stage{
+public:
     string name, instName;
     Status status;
     bool isRs, isRt;
     string frs, frt;
 
     Stage();
-    Stage(int name);
+    Stage(string name);
 
     void clearStatus();
-    void set(string inst,Status st);
+    void set(string inst,Status st=Normal);
     void setforwardRs(string s);
     void setforwardRt(string s);
 

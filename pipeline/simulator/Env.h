@@ -5,6 +5,22 @@
 #include <vector>
 #include "Error.h"
 #include "PipelineReg.h"
+#include "Stage.h"
+
+enum StageName{
+    SIF,
+    SID,
+    SEXE,
+    SMEM,
+    SWB
+};
+
+enum PregName{
+    IF_ID,
+    ID_EXE,
+    EXE_MEM,
+    MEM_WB
+};
 
 class Env
 {
@@ -14,10 +30,11 @@ public:
     /* register */
     int reg[35]; // 32: HI, 33: LO
     unsigned int PC;
-    bool hadgethi;
+    bool hadgetHi;
 
-    /* PipelineReg */
-    PipelineReg preg[4];
+    /* Pipeline */
+    PipelineReg *preg[4];
+    Stage *stage[5];
 
     /*  snapshot.rpt */
     FILE *fresult;

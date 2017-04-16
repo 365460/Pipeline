@@ -8,11 +8,10 @@ PipelineReg::PipelineReg(Instruction* i){
     nop = i==NULL;
     inst = i;
     ALUResult = MEMResult = 0;
-    WBWrite = MEMread = MEMWrite = false;
 }
 
 void PipelineReg::flush(){
     nop = true;
-    WBWrite = MEMread = MEMWrite = false;
     inst = NULL;
+    ALUResult = MEMResult = 0;
 }
