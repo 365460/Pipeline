@@ -7,7 +7,7 @@ main: main.cpp Error.o Env.o Inst.o Im.o Preg.o Stage.o sim.o
 Error.o: Error.cpp Error.h
 	$(GCC) $(Flag) -c Error.cpp -o Error.o
 
-Env.o: Env.cpp Env.h Error.o Preg.o Stage.o
+Env.o: Env.cpp Env.h Error.o Preg.o Stage.o Im.o
 	$(GCC) $(Flag) -c Env.cpp -o Env.o
 
 Inst.o: Instruction.h Instruction.cpp Error.o

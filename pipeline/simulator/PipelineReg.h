@@ -14,6 +14,8 @@ public:
     PipelineReg(Instruction* i);
 
     void flush();
+    void getfrom(PipelineReg *reg);
+    void getfrom(Instruction *);
 };
 
 

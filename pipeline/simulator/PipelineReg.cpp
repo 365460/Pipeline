@@ -15,3 +15,16 @@ void PipelineReg::flush(){
     inst = NULL;
     ALUResult = MEMResult = 0;
 }
+
+void PipelineReg::getfrom(PipelineReg *reg){
+    this->inst = reg->inst;
+    this->nop = reg->nop;
+    this->ALUResult = reg->ALUResult;
+    this->MEMResult = reg->MEMResult;
+}
+
+void PipelineReg::getfrom(Instruction *inst){
+    this->inst = inst;
+    nop = inst==NULL;
+    ALUResult = MEMResult = 0;
+}

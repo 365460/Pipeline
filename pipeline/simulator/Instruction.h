@@ -21,7 +21,9 @@ public:
     InstType type;
     string name;
     int code, opcode, rs, rt, rd, funct, C_shamt, C, C_addr;
+    int regDst; // for regWrite
     bool RegWrite, MEMRead, MEMWrite;
+    bool needRs, needRt;
 
     static Instruction* decode(int);
     Instruction();

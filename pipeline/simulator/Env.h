@@ -6,6 +6,7 @@
 #include "Error.h"
 #include "PipelineReg.h"
 #include "Stage.h"
+#include "IMemory.h"
 
 enum StageName{
     SIF,
@@ -26,15 +27,19 @@ class Env
 {
 public:
     int memory[260];
+    IMemory *im;
 
     /* register */
     int reg[35]; // 32: HI, 33: LO
     unsigned int PC;
     bool hadgetHi;
 
+
     /* Pipeline */
     PipelineReg *preg[4];
     Stage *stage[5];
+    bool hasStalled;
+    bool hasFlushed;
 
     /*  snapshot.rpt */
     FILE *fresult;

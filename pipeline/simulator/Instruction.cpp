@@ -106,6 +106,29 @@ Instruction* Instruction::decode(int code){
         inst->RegWrite = true;
         inst->MEMRead = false;
         inst->MEMWrite = false;
+        inst->regDst = inst->rd;
+
+        switch(inst->funct){
+            case 0x00:
+            case 0x02:
+            case 0x03:
+            case 0x10:
+            case 0x12:
+                inst->needRs = false;
+                break;
+            default:
+                inst->needRs = true;
+        }
+
+        switch(inst->funct){
+            case 0x08:
+            case 0x10:
+            case 0x12:
+                inst->needRt = false;
+                break;
+            default:
+                inst->needRt = true;
+        }
     }
     else if(inst->type == I_Type){
 
@@ -122,19 +145,31 @@ Instruction* Instruction::decode(int code){
         if(opcode==0x2B || opcode==0x29 || opcode==0x28 || opcode==0x04 ||
             opcode==0x05 || opcode==0x07)
             inst->RegWrite = false;
-        else inst->RegWrite = true;
+        else{// lw and addi...
+            inst->RegWrite = true;
+            inst->regDst = inst->rt;
+        }
+
+        if(inst->opcode==0x04 || inst->opcode==0x05) inst->needRt = true;
+        else inst->needRt= false;
+
+        if(inst->opcode==0x0F) inst->needRs = false;
+        else inst->needRs = true;
     }
     else if(inst->type == J_Type){
-        if(inst->opcode == 0x03) // jal
+        if(inst->opcode == 0x03){ // jal
             inst->RegWrite = true;
+            inst->regDst = 31;
+        }
         else inst->RegWrite = false;
 
         inst->MEMRead = inst->MEMWrite = false;
+        inst->needRs  = inst->needRt = false;
     }
     else{ // halt
         inst->RegWrite = false;
-        inst->MEMRead = false;
-        inst->MEMWrite = false;
+        inst->MEMRead = inst->MEMWrite = false;
+        inst->needRs  = inst->needRt = false;
     }
 
     return inst;

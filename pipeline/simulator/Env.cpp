@@ -2,7 +2,6 @@
 
 Env::Env(){
 
-    hadgetHi = true;
     stage[0] = new Stage("IF");
     stage[1] = new Stage("ID");
     stage[2] = new Stage("EX");
@@ -11,7 +10,11 @@ Env::Env(){
 
     for(int i=0; i<4; i++)
         preg[i] = new PipelineReg(); // nop
+    hasStalled = hasFlushed = false;
 
+    im = new IMemory();
+
+    hadgetHi = true;
     for(int i=0; i<260; i++) memory[i] = 0;
     for(int i=0; i<34; i++){
         report.push_back(i);

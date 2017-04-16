@@ -12,7 +12,6 @@ int main()
 {
     bool halt = false;
 
-    IMemory *im = new IMemory();
     Env* env = new Env();
 
     // FILE *fp = fopen("iimage.bin","r");
@@ -32,7 +31,7 @@ int main()
 
     try
     {
-        im->loadInst(finst);
+        env->im->loadInst(finst);
     }
     catch(Error e)
     {
@@ -51,7 +50,7 @@ int main()
     }
     fclose(fdm);
 
-    env->PC = im->start;
+    env->PC = env->im->start;
     env->fresult = fresult;
     env->printReport(0);
 
@@ -60,7 +59,7 @@ int main()
         int nowAddress = env->PC;
         try
         {
-            nowInst = im->fetch(nowAddress);
+            // nowInst = im->fetch(nowAddress);
         }
         catch(Error e){
             cout << e.illegal << endl;
