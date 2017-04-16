@@ -10,7 +10,6 @@ Env::Env(){
 
 }
 
-
 void Env::loadMem(FILE *fp){
     char s[4];
     int T = 0, num = 0;

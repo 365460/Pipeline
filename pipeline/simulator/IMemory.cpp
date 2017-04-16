@@ -1,7 +1,7 @@
 #include "IMemory.h"
 
 IMemory::IMemory(){
-    for(int i=0; i<300; i++) inst[i] = decode(0);
+    for(int i=0; i<300; i++) inst[i] = Instruction::decode(0);
 }
 
 void IMemory::loadInst(FILE *fp){
@@ -25,7 +25,7 @@ void IMemory::loadInst(FILE *fp){
             // printf("%d: 0x%08X\n",nowaddress, code);
             if(nowaddress>1020)
                 throw Error("illegal, I-M loaded address is over 1024");
-            inst[nowaddress/4] = decode(code);
+            inst[nowaddress/4] = Instruction::decode(code);
             // inst[nowaddress/4]->print();
             nowaddress += 4;
         }

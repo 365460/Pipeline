@@ -19,8 +19,8 @@ int main()
     FILE *ferror =  fopen("error_dump.rpt", "w");
     FILE *fresult = fopen("snapshot.rpt", "w");
 
-    FILE *finst = fopen("iimage.bin","rb");
-    FILE *fdm =   fopen("dimage.bin","rb");
+    FILE *finst = fopen("../../archiTA/simulator/iimage.bin","rb");
+    FILE *fdm =   fopen("../../archiTA/simulator/dimage.bin","rb");
     if(finst==NULL){
         cout << "no iimage.bin!";
         return 0;
@@ -71,7 +71,7 @@ int main()
         env->PC += 4;
         env->err.message.clear();
         try{
-            nowInst->run( env );
+            // nowInst->run( env );
             if(env->err.message.size() == 0 && env->err.halt==false)
                 env->printReport(cycle);
             else

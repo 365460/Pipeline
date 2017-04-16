@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <vector>
 #include "Error.h"
+#include "PipelineReg.h"
 
 class Env
 {
@@ -14,6 +15,9 @@ public:
     int reg[35]; // 32: HI, 33: LO
     unsigned int PC;
     bool hadgethi;
+
+    /* PipelineReg */
+    PipelineReg preg[4];
 
     /*  snapshot.rpt */
     FILE *fresult;
