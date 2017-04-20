@@ -2,6 +2,8 @@
 
 Env::Env(){
 
+    halt = false;
+
     stage[0] = new Stage("IF");
     stage[1] = new Stage("ID");
     stage[2] = new Stage("EX");
@@ -56,7 +58,10 @@ void Env::loadMem(FILE *fp){
 
 
 void Env::setReg(int address,int code){
-    if(address == 0) return;
+    if(address == 0){
+        err.addError(WriteTo0);
+        return;
+    }
     // printf("set %d = %d\n",address, code);
     if( reg[address]!=code ){
         reg[address] = code;
@@ -69,13 +74,10 @@ void Env::printPC(){
 }
 
 void Env::printReport(int cycle){
-    fprintf(fresult,"cycle %d\n",cycle);
     for(auto i:report){
         if(i==32) fprintf(fresult, "$HI: 0x%08X\n", reg[i]);
         else if(i==33) fprintf(fresult, "$LO: 0x%08X\n", reg[i]);
         else fprintf(fresult, "$%02d: 0x%08X\n",i,reg[i]);
     }
-    printPC();
     report.clear();
-    fprintf(fresult,"\n\n");
 }

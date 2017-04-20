@@ -20,7 +20,7 @@ public:
 
     InstType type;
     string name;
-    int code, opcode, rs, rt, rd, funct, C_shamt, C, C_addr;
+    int code, opcode, rs, rt, rd, funct, C_R, C_I, C_J;
     int regDst; // for regWrite
     bool RegWrite, MEMRead, MEMWrite;
     bool needRs, needRt;
@@ -30,37 +30,4 @@ public:
     void print();
     void getname();
 };
-
-// class Inst_R : public Instruction{
-// public:
-//     Inst_R();
-//     Inst_R(int code);
-//     void run(Env *env);
-//     void print();
-// };
-//
-// class Inst_I : public Instruction{
-// public:
-//     Inst_I();
-//     Inst_I(int code);
-//     void run(Env *env);
-//     void print();
-// };
-//
-// class Inst_J : public Instruction{
-// public:
-//     Inst_J();
-//     Inst_J(int code);
-//     void run(Env *env);
-//     void print();
-// };
-//
-// class Inst_S : public Instruction{
-// public:
-//     Inst_S();
-//     Inst_S(int code);
-//     void run(Env *env);
-//     void print();
-// };
-//
 #endif

@@ -28,12 +28,13 @@ class Env
 public:
     int memory[260];
     IMemory *im;
+    bool halt;
 
     /* register */
     int reg[35]; // 32: HI, 33: LO
     unsigned int PC;
+    unsigned int PC_next;
     bool hadgetHi;
-
 
     /* Pipeline */
     PipelineReg *preg[4];

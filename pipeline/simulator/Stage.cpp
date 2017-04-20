@@ -13,9 +13,10 @@ Stage::Stage(string name){
 }
 
 void Stage::set(string inst, Status s){
-    clearStatus();
     this->instName = inst;
-    status = s;
+    if(s==Stalled) status = s;
+    else if(isRt || isRs) status = Fwd;
+    else status = s;
 }
 
 void Stage::clearStatus(){
@@ -23,34 +24,41 @@ void Stage::clearStatus(){
     status = Normal;
 }
 
+void Stage::setNop(){
+    isRs = isRt = false;
+    status = NOP;
+}
+
 void Stage::setforwardRs(string s){
     status = Fwd;
+    isRs = true;
     frs = s;
 }
 
 void Stage::setforwardRt(string s){
     status = Fwd;
+    isRt = true;
     frt = s;
 }
 
-void Stage::print(){
-    if(status==NOP) printf("%s: NOP\n",name.c_str());
+void Stage::print(FILE* fp){
+    if(status==NOP) fprintf(fp,"%s: NOP\n",name.c_str());
     else{
-        printf("%s: %s",name.c_str(), instName.c_str());
+        fprintf(fp,"%s: %s",name.c_str(), instName.c_str());
         switch (status) {
             case Stalled:
-                printf(" to_be_stalled\n");
+                fprintf(fp," to_be_stalled\n");
                 break;
             case Flushed:
-                printf(" to_be_flushed\n");
+                fprintf(fp," to_be_flushed\n");
                 break;
             case Fwd:
-                if(isRs) printf(" %s",frs.c_str());
-                if(isRt) printf(" %s",frt.c_str());
-                printf("\n");
+                if(isRs) fprintf(fp," %s",frs.c_str());
+                if(isRt) fprintf(fp," %s",frt.c_str());
+                fprintf(fp,"\n");
                 break;
             case Normal:
-                printf("\n");
+                fprintf(fp,"\n");
                 break;
         }
     }

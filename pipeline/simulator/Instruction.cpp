@@ -94,26 +94,33 @@ Instruction* Instruction::decode(int code){
     inst->rs      = getCode(code, 21, 25);
     inst->rt      = getCode(code, 16, 20);
     inst->rd      = getCode(code, 11, 15);
-    inst->C_shamt = getCode(code,  6, 10);
-    inst->C       = code<<16>>16; // signed-extend
-    inst->C_addr  = getCode(code, 0, 25);
+    inst->C_R     = getCode(code,  6, 10); // unsigned
+    inst->C_I     = code<<16>>16; // signed-extend
+    inst->C_J     = getCode(code, 0, 25); // unsigned
     inst->funct   = getCode(code, 0, 5);
 
     inst->getname();
 
     // control signal
     if(inst->type == R_Type){
-        inst->RegWrite = true;
+        switch(inst->funct){
+            case 0x08: // jr
+            case 0x18: // mult
+            case 0x19: // multu
+                inst->RegWrite = false;
+                break;
+            default:inst->RegWrite = true;
+        }
         inst->MEMRead = false;
         inst->MEMWrite = false;
         inst->regDst = inst->rd;
 
         switch(inst->funct){
-            case 0x00:
-            case 0x02:
-            case 0x03:
-            case 0x10:
-            case 0x12:
+            case 0x00:  // sll
+            case 0x02:  // srl
+            case 0x03:  // sra
+            case 0x10:  // mfhi
+            case 0x12:  // mflo
                 inst->needRs = false;
                 break;
             default:
@@ -121,9 +128,9 @@ Instruction* Instruction::decode(int code){
         }
 
         switch(inst->funct){
-            case 0x08:
-            case 0x10:
-            case 0x12:
+            case 0x08: // jr
+            case 0x10: // mfhi
+            case 0x12: // mflo
                 inst->needRt = false;
                 break;
             default:
@@ -270,11 +277,11 @@ void Inst_R::run(Env *env){
 
 void Instruction::print(){
     if(type==R_Type)
-        printf("R_type : %d %d %d %d %d\n", rs, rt, rd, C, funct);
+        printf("R_type : %d %d %d %d %d\n", rs, rt, rd, C_R, funct);
     else if(type==I_Type)
-        printf("I_type : %d %d %d %d\n", opcode, rs, rt, C);
+        printf("I_type : %d %d %d %d\n", opcode, rs, rt, C_I);
     else if(type==J_Type)
-        printf("J_type : %d %d\n", opcode, C);
+        printf("J_type : %d %d\n", opcode, C_J);
     else
         printf("S_type : %d\n", opcode);
 
@@ -413,15 +420,15 @@ void Instruction::print(){
 //         env->setReg(rt, result);
 //     }
 //     else if(opcode==0x0D){ //ori
-//         if(rt==0) env->err.addError(WriteTo0);
+        // if(rt==0) env->err.addError(WriteTo0);
 //         int cc = (unsigned) C<<16>>16;
-//         int result = env->reg[rs]|cc;
+        // int result = env->reg[rs]|cc;
 //         env->setReg(rt, result);
 //     }
 //     else if(opcode==0x0E){ //nori
 //         if(rt==0) env->err.addError(WriteTo0);
 //         int cc = (unsigned) C<<16>>16;
-//         int result = ~(env->reg[rs]|cc);
+        // int result = ~(env->reg[rs]|cc);
 //         env->setReg(rt, result);
 //     }
 //     else if(opcode==0x0A){ //slti

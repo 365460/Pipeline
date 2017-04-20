@@ -10,7 +10,7 @@ public:
     int ALUResult, MEMResult;
     bool nop;
 
-    PipelineReg(); // will set NOP
+    PipelineReg(); // default:  NOP
     PipelineReg(Instruction* i);
 
     void flush();

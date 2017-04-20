@@ -26,10 +26,11 @@ public:
 
     void clearStatus();
     void set(string inst,Status st=Normal);
+    void setNop();
     void setforwardRs(string s);
     void setforwardRt(string s);
 
-    void print();
+    void print(FILE *fp);
 };
 
 
