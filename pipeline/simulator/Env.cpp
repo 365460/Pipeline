@@ -62,7 +62,6 @@ void Env::setReg(int address,int code){
         err.addError(WriteTo0);
         return;
     }
-    // printf("set %d = %d\n",address, code);
     if( reg[address]!=code ){
         reg[address] = code;
         report.push_back( address );

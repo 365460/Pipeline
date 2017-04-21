@@ -8,8 +8,8 @@ void IMemory::loadInst(FILE *fp){
     char s[4];
     int T = 0, nowaddress = 0;
     while(fscanf(fp,"%c",&s[0])==1){
-            for(int i=1; i<4; i++) fscanf(fp,"%c",&s[i]);
-            int code = 0;
+        for(int i=1; i<4; i++) fscanf(fp,"%c",&s[i]);
+        int code = 0;
         int base = 24;
         for(int j=0; j<4; j++, base -= 8){
             int t2 = (unsigned)s[j]<<24>>24;
@@ -28,7 +28,9 @@ void IMemory::loadInst(FILE *fp){
             inst[nowaddress/4] = Instruction::decode(code);
             // inst[nowaddress/4]->print();
             nowaddress += 4;
+            if(nowaddress > end) break;
         }
+
         T++;
     }
 }
@@ -48,7 +50,7 @@ void IMemory::print(){
     printf("There are %d instructions.\n",end-start+1);
 
     for(int i=start; i<=end; i+=4){
+        printf("0x%08X :",i);
         inst[i/4]->print();
-        printf("0x%08X\n\n",inst[i/4]->code);
     }
 }

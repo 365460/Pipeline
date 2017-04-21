@@ -56,7 +56,9 @@ int main()
     for(cycle=0; cycle<=500000; cycle++){
         fprintf(env->fresult,"cycle %d\n",cycle);
 
-        if(cycle==0) env->printReport(0);
+        for(auto i: env->err.message)
+            fprintf(ferror, "In cycle %d: %s\n",cycle, i.c_str());
+        env->err.message.clear();
         try{
             run(env);
         }catch(Error e){
@@ -67,6 +69,8 @@ int main()
 
         if(env->halt) break;
     }
+    for(auto i: env->err.message)
+        fprintf(ferror, "In cycle %d: %s\n",cycle+1, i.c_str());
     fclose( fresult );
     fclose( ferror );
     if(cycle>500000) printf("illegal cycles, over 500,000 cycles\n");

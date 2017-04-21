@@ -130,7 +130,7 @@ Instruction* Instruction::decode(int code){
         switch(inst->funct){
             case 0x08: // jr
             case 0x10: // mfhi
-            case 0x12: // mflo
+            case 0x12:
                 inst->needRt = false;
                 break;
             default:
@@ -157,7 +157,9 @@ Instruction* Instruction::decode(int code){
             inst->regDst = inst->rt;
         }
 
-        if(inst->opcode==0x04 || inst->opcode==0x05) inst->needRt = true;
+        // sw sh sb beq bne
+        if(opcode==0x2B||opcode==0x29||opcode==0x28||opcode==0x04||opcode==0x05)
+            inst->needRt = true;
         else inst->needRt= false;
 
         if(inst->opcode==0x0F) inst->needRs = false;
@@ -276,12 +278,14 @@ void Inst_R::run(Env *env){
 */
 
 void Instruction::print(){
+    cout << name;
     if(type==R_Type)
-        printf("R_type : %d %d %d %d %d\n", rs, rt, rd, C_R, funct);
-    else if(type==I_Type)
-        printf("I_type : %d %d %d %d\n", opcode, rs, rt, C_I);
+printf(" $%d, $%d, $%d\n", rs, rt, rd);
+    else if(type==I_Type){
+printf(" $%d, $%d, %d, regDst = %d\n", rs, rt, C_I, regDst);
+    }
     else if(type==J_Type)
-        printf("J_type : %d %d\n", opcode, C_J);
+        printf(":  %d\n", C_J);
     else
         printf("S_type : %d\n", opcode);
 

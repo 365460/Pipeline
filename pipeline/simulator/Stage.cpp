@@ -56,6 +56,7 @@ void Stage::print(FILE* fp){
                 if(isRs) fprintf(fp," %s",frs.c_str());
                 if(isRt) fprintf(fp," %s",frt.c_str());
                 fprintf(fp,"\n");
+
                 break;
             case Normal:
                 fprintf(fp,"\n");

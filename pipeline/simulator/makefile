@@ -29,4 +29,4 @@ run:main
 	./pipeline
 
 clean:
-	rm *.o *.exe
+	rm *.o 
