@@ -17,8 +17,8 @@ int main()
     FILE *ferror =  fopen("error_dump.rpt", "w");
     FILE *fresult = fopen("snapshot.rpt", "w");
 
-    FILE *finst = fopen("../../archiTA/simulator/iimage.bin","rb");
-    FILE *fdm =   fopen("../../archiTA/simulator/dimage.bin","rb");
+    FILE *finst = fopen("iimage.bin","rb");
+    FILE *fdm =   fopen("dimage.bin","rb");
     if(finst==NULL){
         cout << "no iimage.bin!";
         return 0;
@@ -74,46 +74,5 @@ int main()
     fclose( fresult );
     fclose( ferror );
     if(cycle>500000) printf("illegal cycles, over 500,000 cycles\n");
-
-    // for(int cycle=1; cycle<=500000 && !halt; cycle++){
-    //     Instruction *nowInst = NULL;
-    //     int nowAddress = env->PC;
-    //     try
-    //     {
-    //         // nowInst = im->fetch(nowAddress);
-    //     }
-    //     catch(Error e){
-    //         cout << e.illegal << endl;
-    //         halt = true;
-    //         break;
-    //     }
-    //
-    //     env->PC += 4;
-    //     env->err.message.clear();
-    //     try{
-    //         // nowInst->run( env );
-    //         if(env->err.message.size() == 0 && env->err.halt==false)
-    //             env->printReport(cycle);
-    //         else
-    //         {
-    //             if(env->err.message.size()==0) // jush halt
-    //                 halt = true;
-    //             else{
-    //                 for(auto i: env->err.message)
-    //                     fprintf(ferror, "In cycle %d: %s\n",cycle, i.c_str());
-    //             }
-    //
-    //             if(env->err.halt == true) halt = true;
-    //             else env->printReport(cycle);
-    //         }
-    //     }
-    //     catch(Error e){
-    //         printf("illegal instruction found at 0x%X\n", nowAddress);
-    //         halt = true;
-    //     }
-    // }
-
-    // int n;
-    // while(cin>>n){}
     return 0;
 }

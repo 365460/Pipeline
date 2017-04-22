@@ -42,7 +42,7 @@ void Env::loadMem(FILE *fp){
         }
         else{
             if( id>=256)
-                throw Error("dllegal Dimage..., loaded address is over 1K");
+                throw Error("illegal Dimage..., loaded address is over 1K");
             memory[ id++ ] = code;
             if(id==num) break;
             // printf("mem : %d = 0x%08X\n",code, code);

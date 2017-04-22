@@ -29,4 +29,4 @@ run:main
 	./pipeline
 
 clean:
-	rm *.o 
+	rm *.o  pipeline error_dump.rpt snapshot.rpt

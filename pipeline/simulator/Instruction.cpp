@@ -108,12 +108,14 @@ Instruction* Instruction::decode(int code){
             case 0x18: // mult
             case 0x19: // multu
                 inst->RegWrite = false;
+                inst->regDst = 0;
                 break;
-            default:inst->RegWrite = true;
+            default:
+                inst->RegWrite = true;
+                inst->regDst = inst->rd;
         }
         inst->MEMRead = false;
         inst->MEMWrite = false;
-        inst->regDst = inst->rd;
 
         switch(inst->funct){
             case 0x00:  // sll
@@ -280,12 +282,12 @@ void Inst_R::run(Env *env){
 void Instruction::print(){
     cout << name;
     if(type==R_Type)
-printf(" $%d, $%d, $%d\n", rs, rt, rd);
+printf(" $%d, $%d, $%d,  needRs=%d, RegWrite=%d,regDst=%d\n", rs, rt, rd,needRs, RegWrite, regDst);
     else if(type==I_Type){
-printf(" $%d, $%d, %d, regDst = %d\n", rs, rt, C_I, regDst);
+printf(" $%d, $%d, %d, needRs=%d, needRt=%d, regDst = %d\n", rs, rt, C_I,needRs, needRt, regDst);
     }
     else if(type==J_Type)
-        printf(":  %d\n", C_J);
+        printf(":  %d needRs = %d, RegWrite=%d, regDst=%d, rs=%d\n", C_J, needRs, RegWrite, regDst,rs);
     else
         printf("S_type : %d\n", opcode);
 

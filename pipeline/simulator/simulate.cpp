@@ -15,14 +15,13 @@ void WB(Env *env){
     if(preg->nop){
         env->stage[SWB]->setNop();
         return;
-    }
+    }else env->stage[SWB]->set(inst->name);
     if(inst->RegWrite == true){
         // load
         if(inst->MEMRead) env->setReg(inst->regDst, preg->MEMResult);
         // alu
         else env->setReg(inst->regDst, preg->ALUResult);
     }
-    env->stage[SWB]->set(inst->name);
 }
 
 void MEM(Env *env){
@@ -178,7 +177,7 @@ void EXE(Env *env){
     // forward
     Instruction *i = env->preg[EXE_MEM]->nop? NULL:env->preg[EXE_MEM]->inst;
     Instruction *j = env->preg[MEM_WB]->nop?  NULL:env->preg[MEM_WB]->inst;
-    if(inst->needRs && inst->rs!=0){
+    if(inst->needRs && inst->rs!=0){//rs
         if(env->preg[EXE_MEM]->nop==false&&i->RegWrite&&(i->regDst==inst->rs)){
            if(!i->MEMRead){
                rs = env->preg[ EXE_MEM ]->ALUResult;
@@ -193,7 +192,7 @@ void EXE(Env *env){
         else rs = env->reg[inst->rs];
 
     }
-    if(inst->needRt && inst->rt!=0){
+    if(inst->needRt && inst->rt!=0){//rt
         if( env->preg[EXE_MEM]->nop==false && i->RegWrite && (i->regDst == inst->rt)){
             if(!i->MEMRead){
                 rt = env->preg[ EXE_MEM ]->ALUResult;
@@ -315,7 +314,8 @@ void ID(Env *env){
         env->stage[SID]->setNop();
         return;
     }
-    else if(inst->opcode==0 && inst->rt==0 && inst->rd==0 && inst->C_R==0){// sll $0, $0, 0
+    // sll $0, $0, 0
+    else if(inst->opcode==0 && inst->rt==0 && inst->rd==0 && inst->C_R==0 && inst->funct==0){
         env->stage[SID]->setNop();
         env->preg[IF_ID]->flush();
         return;
@@ -324,10 +324,11 @@ void ID(Env *env){
     int s = env->reg[ inst->rs ], t = env->reg[ inst->rt ];
 
 // stall
+    // stall, if previous instruction needs memread
     if(inst->needRs && checkStalled_lw(env, inst->rs, ID_EXE)) stall = true;
     if(inst->needRt && checkStalled_lw(env, inst->rt, ID_EXE)) stall = true;
 
-    // check EXE_MEM
+    // check EXE_MEM,if rs, rt is needed at ID stage
     if(inst->opcode == 0x04 || inst->opcode == 0x05 || inst->opcode==0x07 || (inst->opcode==0 && inst->funct==0x08)){
         if(inst->needRs && checkStalled_lw(env, inst->rs, EXE_MEM)) stall = true;
         if(inst->needRt && checkStalled_lw(env, inst->rt, EXE_MEM)) stall = true;
@@ -361,7 +362,7 @@ void ID(Env *env){
             stall = true;
 
         if(checkForward(env, inst->rt, EXE_MEM)){
-            env->stage[SID]->setforwardRs("fwd_EX-DM_rt_$"+to_string(inst->rt));
+            env->stage[SID]->setforwardRt("fwd_EX-DM_rt_$"+to_string(inst->rt));
             t = env->preg[EXE_MEM]->ALUResult;
         }
         else t = env->reg[ inst->rt ];
@@ -381,6 +382,7 @@ void ID(Env *env){
             env->PC_next = ADD(env->PC, inst->C_I*4,  env);
         }
 
+        // jump
         if(inst->opcode==0x02){// j
             env->hasFlushed = true;
             env->PC_next = inst->C_J*4;
@@ -449,7 +451,7 @@ void run(Env *env){
 
     env->printReport(0);
     fprintf(env->fresult, "PC: 0x%08X\n", env->PC);
-    int debug = 0, pc = env->PC;
+    int debug = 0;
     WB(env);
 if(debug)    printf("WB: finish\n");
     MEM(env);
